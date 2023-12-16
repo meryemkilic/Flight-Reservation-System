@@ -70,6 +70,10 @@ int main()
     char airlineComp[50];
     char addDelay[1];
     char checkIn[5];
+    char cardNumber[15];
+    char expirationDate[30];
+    char cvv[3];
+    char payment[5];
 
     int index;
     while (true)
@@ -447,8 +451,33 @@ int main()
                 scanf("%d", &selected);
                 ticketType = (TicketType)selected;
                 createReservation(selectedFlight, &passenger, ticketType);
-                writeReservationsToFile();
-                printf("\nReservation created successfully!\n");
+                printf("\n----------       - Payment Information -       ----------\n");
+                printf("Card Number: ");
+                scanf("%s", &cardNumber);
+                printf("Expiration Date (MM/YYYY): ");
+                scanf("%s", &expirationDate);
+                printf("CVV: ");
+                scanf("%s", &cvv);
+                for (int i = 0; i < reservationCount; i++)
+                {
+                    if (reservations[i].passenger->customer == account)
+                    {
+                        printf("Amount: %.2f\n", reservations[i].price);
+                        break;
+                    }
+                }
+                printf("\nDo you confirm the payment? (Yes/No)   ");
+                scanf("%s", &payment);
+                if (strcmp(payment, "yes") || strcmp(payment, "Yes"))
+                {
+                    printf("\nReservation created successfully!\n");
+                    printf("\nPayment successful! Thank you for your reservation.\n");
+                    writeReservationsToFile();
+                }
+                else
+                {
+                    printf("The reservation could not be created.\n");
+                }
                 break;
 
             case 4:
