@@ -10,7 +10,7 @@ const char *RESERVATION_FILE = "reservations.txt";
 const char *FLIGHT_FILE = "flights.txt";
 
 
-void writeCustomersToFile(int customerId)
+void writeCustomersToFile()
 {
     FILE *file = fopen(CUSTOMER_FILE, "w");
     if (!file)
@@ -21,11 +21,8 @@ void writeCustomersToFile(int customerId)
 
     for (int i = 0; i < customerCount; i++)
     {
-        if (customerId == customers[i].id)
-        {
             fprintf(file, "%s %s %d %s %s %s %d\n", customers[i].username, customers[i].password, customers[i].id, customers[i].name, customers[i].email, customers[i].phone, customers[i].isManager);
-            break;
-        }
+        
     }
 
     fclose(file);
@@ -53,7 +50,7 @@ void readCustomersFromFile()
     fclose(file);
 }
 
-void writeReservationsToFile(int reservationId)
+void writeReservationsToFile()
 {
     FILE *file = fopen(RESERVATION_FILE, "w");
     if (!file)
@@ -64,11 +61,9 @@ void writeReservationsToFile(int reservationId)
 
     for (int i = 0; i < reservationCount; i++)
     {
-        if (reservationId == reservations[i].reservationId)
-        {
+        
             fprintf(file, "%d %.2f %d %d %d %d %d\n", reservations[i].reservationId, reservations[i].price, reservations[i].flight->flightId, reservations[i].passenger->id, reservations[i].ticketType, reservations[i].isCheckIn, reservations[i].isFlightFull);
-        break;
-        }
+        
     }
 
     fclose(file);
@@ -101,7 +96,7 @@ void readReservationsFromFile()
     fclose(file);
 }
 
-void writeFlightsToFile(int flightId)
+void writeFlightsToFile()
 {
     FILE *file = fopen(FLIGHT_FILE, "w");
     if (!file)
@@ -112,11 +107,8 @@ void writeFlightsToFile(int flightId)
 
     for (int i = 0; i < flightCount; i++)
     {
-        if (flightId == flights[i].flightId)
-        {
-            fprintf(file, "%d %s %s %d %.2f %s %s %d %d\n", flights[i].flightId, flights[i].date, flights[i].time, flights[i].capacity, flights[i].baseFare, flights[i].departureCity, flights[i].arrivalCity, flights[i].airlineCompany, flights[i].isDelayed);
-        break;
-        }
+          fprintf(file, "%d %s %s %d %.2f %s %s %d %d\n", flights[i].flightId, flights[i].date, flights[i].time, flights[i].capacity, flights[i].baseFare, flights[i].departureCity, flights[i].arrivalCity, flights[i].airlineCompany, flights[i].isDelayed);
+        
     }
 
     fclose(file);
@@ -258,6 +250,30 @@ void deleteReservationFromFile(int deletedReservationId)
 
     remove(RESERVATION_FILE);
     rename("temp_reservations.txt", RESERVATION_FILE);
+}
+
+
+void createTicket(const Reservation *reservation) 
+{
+    char filename[50];
+    sprintf(filename, "ticket_%d.txt", reservation->reservationId);
+
+    FILE *file = fopen(filename, "w");
+    if (!file) {
+        perror("Error opening ticket file");
+        return;
+    }
+
+    fprintf(file, "Reservation ID: %d\n", reservation->reservationId);
+    fprintf(file, "Price: %.2f\n", reservation->price);
+    fprintf(file, "Flight ID: %d\n", reservation->flight->flightId);
+    fprintf(file, "Passenger ID: %d\n", reservation->passenger->id);
+    fprintf(file, "Ticket Type: %d\n", reservation->ticketType);
+    fprintf(file, "Check-In: %s\n", reservation->isCheckIn ? "Yes" : "No");
+    fprintf(file, "Flight Full: %s\n", reservation->isFlightFull ? "Yes" : "No");
+
+    fclose(file);
+    printf("Ticket created successfully. Download the %s file.\n", filename);
 }
 
 /*

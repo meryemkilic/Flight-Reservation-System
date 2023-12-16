@@ -40,7 +40,7 @@ Passenger createPassenger(char *name, char *surname, char *phone, Customer *cust
     p.passengerType = passengerType;
     passengers[passengerCount] = p;
     passengerCount++;
-
+    
     return p;
 }
 

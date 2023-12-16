@@ -4,15 +4,17 @@
 #include "aPerson.h"
 #include "aFlight.h"
 #include "aReservation.h"
-void writeCustomersToFile(int customerId);
+
+void writeCustomersToFile();
 void readCustomersFromFile();
 void deleteCustomerFromFile(int deletedCustomerId);
 
-void writeReservationsToFile(int reservationId);
+void writeReservationsToFile();
 void readReservationsFromFile();
 void deleteReservationFromFile(int deletedReservationId);
+void createTicket(const Reservation *reservation);
 
-void writeFlightsToFile(int flightId);
+void writeFlightsToFile();
 void readFlightsFromFile();
 void deleteFlightFromFile(int deletedFlightId);
 

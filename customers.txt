@@ -1,2 +1,2 @@
-manager 123 1 manager manager@gmail.com 123456789 1
-sare 123 2 sare s 1 0
+manager 123 1001 manager manager@gmail.com 123456789 1
+meryem 123 1002 meryem meryem@gmail.com 987654321 0

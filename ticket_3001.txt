@@ -1,0 +1,7 @@
+Reservation ID: 3001
+Price: 480.00
+Flight ID: 2003
+Passenger ID: 1003
+Ticket Type: 1
+Check-In: Yes
+Flight Full: No

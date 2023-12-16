@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 #include "aPerson.c"
 #include "aFlight.c"
@@ -42,6 +43,10 @@ int main()
     createFlight("18.12.2023", "12:00", 100, 500.0, "Istanbul", "Ankara", PEGASUS, false);
     createFlight("18.12.2023", "12:00", 100, 600.0, "Istanbul", "Ankara", TURKISH_AIRLINES, false);
     createFlight("18.12.2023", "12:00", 100, 400.0, "Istanbul", "Ankara", ANADOLU_JET, false);
+
+    writeCustomersToFile();
+    writeFlightsToFile();
+    writeReservationsToFile();
 
     char username[30];
     char password[30];
@@ -133,8 +138,8 @@ int main()
                 scanf("%s", airlineComp);
                 AirlineCompany a;
                 sscanf(airlineComp, "%d", &a);
-
-                writeFlightsToFile(createFlight(date, time, capacity, baseFare, departureCity, arrivalCity, a, false).flightId);
+                createFlight(date, time, capacity, baseFare, departureCity, arrivalCity, a, false);
+                writeFlightsToFile();
                 printf("\nFlight created successfully!\n");
                 break;
 
@@ -156,7 +161,8 @@ int main()
 
                 // createCustomer(username, password, name, email, phone, option).id;
 
-                writeCustomersToFile(createCustomer(username, password, name, email, phone, option).id);
+                createCustomer(username, password, name, email, phone, option);
+                writeCustomersToFile();
                 printf("\nCustomer created successfully!\n");
                 break;
 
@@ -182,7 +188,8 @@ int main()
                 printf("\nPlease choose the ticket type (0: Economy, 1: First Class).   ");
                 scanf("%d", &option);
                 ticketType = (TicketType)option;
-                writeReservationsToFile(createReservation(selectedFlight, selectedPassenger, ticketType).reservationId);
+                createReservation(selectedFlight, selectedPassenger, ticketType);
+                writeReservationsToFile();
                 printf("\nReservation created successfully!\n");
                 break;
 
@@ -205,8 +212,7 @@ int main()
                 printf("Please enter the flight ID to delete.   ");
                 scanf("%d", &flightId);
                 deleteFlight(flightId);
-                deleteFlightFromFile(flightId);
-                // writeFlightsToFile();
+                writeFlightsToFile();
                 printf("\nFlight deleted successfully!\n");
                 break;
 
@@ -222,7 +228,7 @@ int main()
                 printf("\n\nPlease enter the customer ID to delete.   ");
                 scanf("%d", &customerId);
                 deleteCustomer(customerId);
-                deleteCustomerFromFile(customerId);
+                writeCustomersToFile();
                 printf("\nCustomer deleted successfully!\n");
                 break;
 
@@ -239,8 +245,7 @@ int main()
                 printf("\n\nPlease enter the reservation ID to delete.   ");
                 scanf("%d", &index);
                 deleteReservation(index);
-                deleteReservationFromFile(index);
-                // writeReservationsToFile();
+                writeReservationsToFile();
                 printf("\nReservation deleted successfully!\n");
                 break;
 
@@ -248,7 +253,6 @@ int main()
                 printf("\n----------       - Flight Update Process -       ----------\n");
                 printf("Please enter the flight ID to update.   ");
                 scanf("%d", &flightId);
-                deleteFlightFromFile(flightId);
                 Flight *updatedFlight = findFlightById(flightId);
                 if (updatedFlight == NULL)
                 {
@@ -262,7 +266,7 @@ int main()
 
                 if (updateFlight(updatedFlight, date, time))
                 {
-                    writeFlightsToFile(flightId);
+                    writeFlightsToFile();
                     printf("\nFlight updated successfully!\n");
                 }
                 else
@@ -282,8 +286,7 @@ int main()
                     break;
                 }
                 delayedFlight->isDelayed = true;
-                deleteFlightFromFile(flightId);
-                writeFlightsToFile(flightId);
+                writeFlightsToFile();
                 printf("\nDelay added to the flight successfully!\n");
                 break;
 
@@ -440,12 +443,11 @@ int main()
 
                 Passenger passenger = createPassenger(name, surname, phone, account, passengerType);
 
-                printf("\nPlease choose the ticket type (0: Economy, 1: First Class).   ");
+                printf("Please choose the ticket type (0: Economy, 1: First Class)   ");
                 scanf("%d", &selected);
                 ticketType = (TicketType)selected;
                 createReservation(selectedFlight, &passenger, ticketType);
-
-                // writeReservationsToFile();
+                writeReservationsToFile();
                 printf("\nReservation created successfully!\n");
                 break;
 
@@ -464,14 +466,13 @@ int main()
                         printf("Ticket Type: %s\n", ticketTypes[reservations[i].ticketType]);
                         printf("Check-In: %s\n", reservations[i].isCheckIn ? "Yes" : "No");
                         printf("Flight Full: %s\n", reservations[i].isFlightFull ? "Yes" : "No");
-                        printf("\n--------------------------\n");
                     }
                 }
                 if (countCase2 == 0)
                 {
                     printf("\nYou have no reservations.\n");
+                    break;
                 }
-                break;
 
                 printf("Please enter the reservation ID to cancel.   ");
                 scanf("%d", &reservationId);
@@ -487,9 +488,17 @@ int main()
                     printf("\nYou can only cancel your own reservations.\n");
                 }
 
-                deleteReservation(reservationId);
-                // writeReservationsToFile();
-                printf("\nReservation canceled successfully!\n");
+                if (reservation->isCheckIn)
+                {
+                    printf("You cannot cancel this reservation because you have already checked in.\n");
+                }
+                else
+                {
+                    deleteReservation(reservationId);
+                    writeReservationsToFile();
+                    printf("\nReservation canceled successfully!\n");
+                }
+
                 break;
             case 5:
                 printf("\n----------       - Reservation Check-In Process -       ----------\n");
@@ -507,11 +516,13 @@ int main()
                             printf("Ticket Type: %s\n", ticketTypes[reservations[i].ticketType]);
                             printf("Check-In: %s\n", reservations[i].isCheckIn ? "Yes" : "No");
                             printf("Flight Full: %s\n", reservations[i].isFlightFull ? "Yes" : "No");
-                            printf("Do you want to Check-In? ( Yes - No )");
+                            printf("Do you want to Check-In? ( Yes - No )   ");
                             scanf("%s", &checkIn);
-                            if (strcmp(checkIn, "Yes") && strcmp(checkIn, "yes"))
+                            if (strcmp(checkIn, "Yes") || strcmp(checkIn, "yes"))
                             {
                                 reservations[i].isCheckIn = true;
+                                printf("\nCheck-In proccess completed.\n");
+                                break;
                             }
                         }
                     }
@@ -521,8 +532,16 @@ int main()
                     printf("\nYou have no reservations.\n");
                 }
                 break;
-
+            case 6:
+                for (int i = 0; i < reservationCount; i++)
+                {
+                    if (reservations[i].passenger->customer == account)
+                    {
+                        createTicket(&reservations[i]);
+                    }
+                }
                 break;
+
             case 7:
                 printf("Logging out...\n");
                 account = NULL;
@@ -533,5 +552,8 @@ int main()
             }
         }
     }
+    writeCustomersToFile();
+    writeFlightsToFile();
+    writeReservationsToFile();
     return 0;
 }

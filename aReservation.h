@@ -30,4 +30,5 @@ Reservation createReservation(Flight *flight, Passenger *passenger, TicketType t
 void deleteReservation(int reservationId);
 void confirmCheckIn(int reservationId);
 int generateReservationId();
+
 #endif
