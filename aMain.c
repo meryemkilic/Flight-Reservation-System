@@ -215,6 +215,10 @@ int main()
                 }
                 printf("Please enter the flight ID to delete.   ");
                 scanf("%d", &flightId);
+                Flight *f= findFlightById(flightId);
+                if(!f->capacity==0){
+
+                }
                 deleteFlight(flightId);
                 writeFlightsToFile();
                 printf("\nFlight deleted successfully!\n");
@@ -226,7 +230,7 @@ int main()
                 for (int i = 0; i < customerCount; i++)
                 {
                     printf("Customer ID: %d\n", customers[i].id);
-                    printf("Customer name: %d\n", customers[i].name);
+                    printf("Customer name: %s\n", customers[i].name);
                     printf("\n--------------------------\n");
                 }
                 printf("\n\nPlease enter the customer ID to delete.   ");
@@ -242,7 +246,7 @@ int main()
                 for (int i = 0; i < reservationCount; i++)
                 {
                     printf("Reservation ID: %d\n", reservations[i].reservationId);
-                    printf("Passenger name: %d\n", reservations[i].passenger->name);
+                    printf("Passenger name: %s\n", reservations[i].passenger->name);
                     printf("Flight Informations:\nFlight Id: %d     Flight's route: %s - %s", reservations[i].flight->flightId, reservations[i].flight->departureCity, reservations[i].flight->arrivalCity);
                     printf("\n--------------------------\n");
                 }
@@ -562,13 +566,9 @@ int main()
                 }
                 break;
             case 6:
-                for (int i = 0; i < reservationCount; i++)
-                {
-                    if (reservations[i].passenger->customer == account)
-                    {
-                        createTicket(&reservations[i]);
-                    }
-                }
+
+                readReservationsFromFile("reservations.txt", &createTicket, account);
+
                 break;
 
             case 7:
