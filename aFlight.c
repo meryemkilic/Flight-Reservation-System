@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "aFlight.h"
+#include "aReservation.h"
 
 Flight flights[100];
 int flightCount = 0;
@@ -39,8 +39,11 @@ void deleteFlight(int deletedFlightId)
     {
         if (reservations[i].flight->flightId == deletedFlightId)
         {
-            thereIsNoReservation = true;
-            break;
+            if (reservations[i].isCheckIn)
+            {
+                thereIsNoReservation = true;
+                break;
+            }
         }
     }
 

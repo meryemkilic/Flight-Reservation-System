@@ -10,6 +10,7 @@ void deleteCustomerFromFile(int deletedCustomerId);
 
 void writeReservationsToFile();
 void readReservationsFromFile(const char *RESERVATION_FILE, void (*processReservation)(const Reservation *), Customer *account);
+//void readReservationsFromFile(const char *RESERVATION_FILE, Customer *account);
 void deleteReservationFromFile(int deletedReservationId);
 void createTicket(const Reservation *reservation);
 

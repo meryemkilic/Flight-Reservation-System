@@ -68,7 +68,8 @@ void writeReservationsToFile()
 
     fclose(file);
 }
-void readReservationsFromFile(const char *RESERVATION_FILE, void (*processReservation)(const Reservation *), Customer *account) {
+
+void readReservationsFromFile(const char *RESERVATION_FILE, void (*createTicket)(const Reservation *), Customer *account) {
     FILE *file = fopen(RESERVATION_FILE, "r");
     if (!file) {
         perror("Error opening reservations file");
@@ -99,7 +100,7 @@ void readReservationsFromFile(const char *RESERVATION_FILE, void (*processReserv
         }
 
         if (reservation->passenger->customer == account) {
-            processReservation(reservation);
+            createTicket(reservation);
         }
 
         free(reservation);
@@ -107,7 +108,39 @@ void readReservationsFromFile(const char *RESERVATION_FILE, void (*processReserv
 
     fclose(file);
 }
+/*
+void readReservationsFromFile(const char *RESERVATION_FILE, Customer *account) {
+    FILE *file = fopen(RESERVATION_FILE, "r");
+    if (!file) {
+        perror("Error opening reservations file");
+        return;
+    }
 
+    while (1) {
+        Reservation *reservation = (Reservation *)malloc(sizeof(Reservation));
+        if (!reservation) {
+            perror("Memory allocation error");
+            fclose(file);
+            return;
+        }
+
+        int result = fscanf("%d %.2f %d %d %d %d %d\n", &reservation->reservationId, &reservation->price, 
+        &reservation->flight->flightId, &reservation->passenger->id, 
+        &reservation->ticketType, &reservation->isCheckIn, &reservation->isFlightFull);
+
+        if (result == EOF) {
+            free(reservation);
+            break;
+        } else if (result != 7) {  
+            fprintf(stderr, "Error reading reservation data\n");
+            free(reservation);
+            break;
+        }
+    }
+    
+    fclose(file);
+}
+*/
 
 void writeFlightsToFile()
 {

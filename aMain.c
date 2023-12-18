@@ -126,19 +126,19 @@ int main()
             case 1:
                 printf("\n----------       - Flight Creation Process -       ----------\n");
                 printf("Please enter flight's information.\n");
-                printf("\nPlease enter the flight's date.   ");
+                printf("\nPlease enter the flight's date:   ");
                 scanf("%s", date);
-                printf("\nPlease enter flight's time.   ");
+                printf("\nPlease enter flight's time:   ");
                 scanf("%s", time);
-                printf("\nPlease enter flight's capacity.   ");
+                printf("\nPlease enter flight's capacity:   ");
                 scanf("%d", &capacity);
-                printf("\nPlease enter flight's base fare.   ");
+                printf("\nPlease enter flight's base fare:   ");
                 scanf("%f", &baseFare);
-                printf("\nPlease enter departure city.   ");
+                printf("\nPlease enter departure city:   ");
                 scanf("%s", departureCity);
-                printf("\nPlease enter arrival city.   ");
+                printf("\nPlease enter arrival city:   ");
                 scanf("%s", arrivalCity);
-                printf("\nPlease choose an Airline Company. (0: Pegasus, 1: Turkish Airlines, 2: Anadolu Jet)   ");
+                printf("\nPlease choose an Airline Company: (0: Pegasus, 1: Turkish Airlines, 2: Anadolu Jet)   ");
                 scanf("%s", airlineComp);
                 AirlineCompany a;
                 sscanf(airlineComp, "%d", &a);
@@ -150,15 +150,15 @@ int main()
             case 2:
                 printf("\n----------       - Customer Creation Process -       ----------\n");
                 printf("Please enter customer's information.\n");
-                printf("\nPlease enter customer's username.   ");
+                printf("\nPlease enter customer's username:   ");
                 scanf("%s", username);
-                printf("\nPlease enter customer's password.   ");
+                printf("\nPlease enter customer's password:   ");
                 scanf("%s", password);
-                printf("\nPlease enter customer's name.   ");
+                printf("\nPlease enter customer's name:   ");
                 scanf("%s", name);
-                printf("\nPlease enter customer's email.   ");
+                printf("\nPlease enter customer's email:   ");
                 scanf("%s", email);
-                printf("\nPlease enter customer's phone.   ");
+                printf("\nPlease enter customer's phone:   ");
                 scanf("%s", phone);
                 printf("\nIs the customer a manager? (1 for Yes, 0 for No)   ");
                 scanf("%d", &option);
@@ -172,8 +172,8 @@ int main()
 
             case 3:
                 printf("\n----------       - Reservation Creation Process -       ----------\n");
-                printf("Please enter reservation's information.\n");
-                printf("\nPlease enter the flight ID for reservation.   ");
+                printf("Please enter reservation's information:\n");
+                printf("\nPlease enter the flight ID for reservation:   ");
                 scanf("%d", &flightId);
                 Flight *selectedFlight = findFlightById(flightId);
                 if (selectedFlight == NULL)
@@ -181,7 +181,7 @@ int main()
                     printf("\nFlight not found!\n");
                     break;
                 }
-                printf("\nPlease enter the passenger ID for reservation.   ");
+                printf("\nPlease enter the passenger ID for reservation:   ");
                 scanf("%d", &index);
                 Passenger *selectedPassenger = findPassengerById(index);
                 if (selectedPassenger == NULL)
@@ -189,7 +189,7 @@ int main()
                     printf("\nPassenger not found!\n");
                     break;
                 }
-                printf("\nPlease choose the ticket type (0: Economy, 1: First Class).   ");
+                printf("\nPlease choose the ticket type: (0: Economy, 1: First Class)   ");
                 scanf("%d", &option);
                 ticketType = (TicketType)option;
                 createReservation(selectedFlight, selectedPassenger, ticketType);
@@ -213,11 +213,11 @@ int main()
                     printf("Is Delayed: %s\n", flights[i].isDelayed ? "Yes" : "No");
                     printf("\n--------------------------\n");
                 }
-                printf("Please enter the flight ID to delete.   ");
+                printf("Please enter the flight ID to delete:   ");
                 scanf("%d", &flightId);
-                Flight *f= findFlightById(flightId);
-                if(!f->capacity==0){
-
+                Flight *f = findFlightById(flightId);
+                if (!f->capacity == 0)
+                {
                 }
                 deleteFlight(flightId);
                 writeFlightsToFile();
@@ -233,7 +233,7 @@ int main()
                     printf("Customer name: %s\n", customers[i].name);
                     printf("\n--------------------------\n");
                 }
-                printf("\n\nPlease enter the customer ID to delete.   ");
+                printf("\n\nPlease enter the customer ID to delete:   ");
                 scanf("%d", &customerId);
                 deleteCustomer(customerId);
                 writeCustomersToFile();
@@ -250,7 +250,7 @@ int main()
                     printf("Flight Informations:\nFlight Id: %d     Flight's route: %s - %s", reservations[i].flight->flightId, reservations[i].flight->departureCity, reservations[i].flight->arrivalCity);
                     printf("\n--------------------------\n");
                 }
-                printf("\n\nPlease enter the reservation ID to delete.   ");
+                printf("\n\nPlease enter the reservation ID to delete:   ");
                 scanf("%d", &index);
                 deleteReservation(index);
                 writeReservationsToFile();
@@ -259,7 +259,7 @@ int main()
 
             case 7:
                 printf("\n----------       - Flight Update Process -       ----------\n");
-                printf("Please enter the flight ID to update.   ");
+                printf("Please enter the flight ID to update:   ");
                 scanf("%d", &flightId);
                 Flight *updatedFlight = findFlightById(flightId);
                 if (updatedFlight == NULL)
@@ -267,9 +267,9 @@ int main()
                     printf("\nFlight not found!\n");
                     break;
                 }
-                printf("\nPlease enter the new date for the flight.   ");
+                printf("\nPlease enter the new date for the flight:   ");
                 scanf("%s", date);
-                printf("\nPlease enter the new time for the flight.   ");
+                printf("\nPlease enter the new time for the flight:   ");
                 scanf("%s", time);
 
                 if (updateFlight(updatedFlight, date, time))
@@ -285,7 +285,7 @@ int main()
 
             case 8:
                 printf("\n----------       - Add Delay to Flight Process -       ----------\n");
-                printf("Please enter the flight ID to add delay.   ");
+                printf("Please enter the flight ID to add delay:   ");
                 scanf("%d", &flightId);
                 Flight *delayedFlight = findFlightById(flightId);
                 if (delayedFlight == NULL)
@@ -364,8 +364,9 @@ int main()
             printf("  3- Create a new reservation\n");
             printf("  4- Cancel a reservation\n");
             printf("  5- Check-In\n");
-            printf("  6- Download my online ticket\n");
-            printf("  7- Logout\n");
+            printf("  6- Download my e-ticket\n");
+            printf("  7- Notifications\n");
+            printf("  8- Logout\n");
 
             int choice;
             int countCase2 = 0;
@@ -423,7 +424,7 @@ int main()
             case 3:
 
                 printf("\n----------       - Reservation Creation Process -       ----------\n");
-                printf("Please enter the flight ID for reservation.   ");
+                printf("Please enter the flight ID for reservation:   ");
                 scanf("%d", &flightId);
                 Flight *selectedFlight = findFlightById(flightId);
                 if (selectedFlight == NULL)
@@ -431,7 +432,7 @@ int main()
                     printf("\nFlight not found!\n");
                     break;
                 }
-                printf("Please enter the passenger informations.\n");
+                printf("Please enter the passenger informations:\n");
                 printf("Passenger Name: ");
                 scanf("%s", name);
 
@@ -507,7 +508,7 @@ int main()
                     break;
                 }
 
-                printf("Please enter the reservation ID to cancel.   ");
+                printf("Please enter the reservation ID to cancel:   ");
                 scanf("%d", &reservationId);
                 Reservation *reservation = findReservationById(reservationId);
 
@@ -566,13 +567,32 @@ int main()
                 }
                 break;
             case 6:
+                for (int i = 0; i < reservations; i++)
+                {
+                    if (reservations[i].passenger->customer == account)
+                    {
+                        readReservationsFromFile(*RESERVATION_FILE, &createTicket, account);
+                    }
+                }
+                break;
+            
+            case 7:
+                printf("\n----------       - Notifications -       ----------\n");
 
-                readReservationsFromFile("reservations.txt", &createTicket, account);
-
+                    for (int i = 0; i < reservationCount; i++)
+                    {
+                        if(reservations[i].passenger->customer==account){
+                            if(reservation[i].flight->isDelayed){
+                                printf("You have a notification.");
+                                printf("Dear %s,\nYour %s - %s flight number %d was delayed.\nWe are sorry for the delay, we wish you a pleasant flight!\n",account->name,reservations[i].flight->departureCity,reservations[i].flight->arrivalCity,reservations[i].flight->flightId);
+                            }
+                        }
+                    }
+                    
                 break;
 
-            case 7:
-                printf("Logging out...\n");
+            case 8:
+                printf("\nLogging out...\n");
                 account = NULL;
                 break;
             default:
@@ -584,5 +604,6 @@ int main()
     writeCustomersToFile();
     writeFlightsToFile();
     writeReservationsToFile();
+
     return 0;
 }

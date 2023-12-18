@@ -8,7 +8,8 @@ Reservation reservations[100];
 int reservationCount = 0;
 static const char *const ticketTypes[] = {[ECONOMY] = "Economy", [FIRST_CLASS] = "First Class"};
 
-int generateReservationId() {
+int generateReservationId()
+{
     static int lastReservationId = 3000;
     return ++lastReservationId;
 }
@@ -50,7 +51,7 @@ Reservation createReservation(Flight *flight, Passenger *passenger, TicketType t
 void deleteReservation(int reservationId)
 {
     int foundIndex = -1;
-    
+
     for (int i = 0; i < reservationCount; i++)
     {
         if (reservations[i].reservationId == reservationId)
@@ -71,6 +72,10 @@ void deleteReservation(int reservationId)
         printf("Cannot cancel reservation with check-in.\n");
         return;
     }
+    else
+    {
+        deletePassenger(reservations[foundIndex].passenger->id);
+    }
 
     for (int j = foundIndex; j < reservationCount - 1; j++)
     {
@@ -81,7 +86,6 @@ void deleteReservation(int reservationId)
     return;
 }
 
-
 void confirmCheckIn(int reservationId)
 {
     for (int i = 0; i < reservationCount; i++)
@@ -89,14 +93,17 @@ void confirmCheckIn(int reservationId)
         if (reservations[i].reservationId == reservationId)
         {
             reservations[i].isCheckIn = true;
-            return; 
+            return;
         }
     }
     printf("Reservation not found\n");
 }
-Reservation* findReservationById(int reservationId) {
-    for (int i = 0; i < sizeof(reservations) / sizeof(reservations[0]); ++i) {
-        if (reservations[i].reservationId == reservationId) {
+Reservation *findReservationById(int reservationId)
+{
+    for (int i = 0; i < sizeof(reservations) / sizeof(reservations[0]); ++i)
+    {
+        if (reservations[i].reservationId == reservationId)
+        {
             return &reservations[i];
         }
     }
