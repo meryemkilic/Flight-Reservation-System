@@ -11,6 +11,11 @@ const char *FLIGHT_FILE = "flights.txt";
 
 void createTicket(const Reservation *reservation)
 {
+    if (!reservation) {
+        fprintf(stderr, "Invalid reservation\n");
+        return;
+    }
+
     char filename[50];
     sprintf(filename, "ticket_%d.txt", reservation->reservationId);
 
@@ -28,11 +33,11 @@ void createTicket(const Reservation *reservation)
     fprintf(file, "Ticket Type: %d\n", reservation->ticketType);
     fprintf(file, "Check-In: %s\n", reservation->isCheckIn ? "Yes" : "No");
     fprintf(file, "Flight Full: %s\n", reservation->isFlightFull ? "Yes" : "No");
-
-    fclose(file);
     printf("Ticket created for Reservation ID %d\n", reservation->reservationId);
     printf("Ticket created successfully. Download the %s file.\n", filename);
+    fclose(file);
 }
+
 
 void writeCustomersToFile()
 {
@@ -84,6 +89,10 @@ void readReservationsFromFile(const char *RESERVATION_FILE, void (*createTicket)
             return;
         }
 
+        // flight ve passenger için bellek ayır
+        reservation->flight = (Flight *)malloc(sizeof(Flight));
+        reservation->passenger = (Passenger *)malloc(sizeof(Passenger));
+        
         int result = fscanf(file, "%d %f %d %d %d %d %d",
                             &reservation->reservationId, &reservation->price,
                             &reservation->flight->flightId, &reservation->passenger->id,
@@ -91,10 +100,14 @@ void readReservationsFromFile(const char *RESERVATION_FILE, void (*createTicket)
                             &reservation->isFlightFull);
 
         if (result == EOF) {
+            free(reservation->flight);
+            free(reservation->passenger);
             free(reservation);
             break;
         } else if (result != 7) {  
             fprintf(stderr, "Error reading reservation data\n");
+            free(reservation->flight);
+            free(reservation->passenger);
             free(reservation);
             break;
         }
@@ -103,11 +116,16 @@ void readReservationsFromFile(const char *RESERVATION_FILE, void (*createTicket)
             createTicket(reservation);
         }
 
+        // ayrılan belleği serbest bırak
+        free(reservation->flight);
+        free(reservation->passenger);
         free(reservation);
+
     }
 
     fclose(file);
 }
+
 /*
 void readReservationsFromFile(const char *RESERVATION_FILE, Customer *account) {
     FILE *file = fopen(RESERVATION_FILE, "r");

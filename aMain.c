@@ -567,11 +567,12 @@ int main()
                 }
                 break;
             case 6:
-                for (int i = 0; i < reservations; i++)
+                for (int i = 0; i < reservationCount; i++)
                 {
                     if (reservations[i].passenger->customer == account)
                     {
-                        readReservationsFromFile(*RESERVATION_FILE, &createTicket, account);
+                        readReservationsFromFile(RESERVATION_FILE, &createTicket, account);
+                        
                     }
                 }
                 break;
@@ -585,7 +586,10 @@ int main()
                             if(reservation[i].flight->isDelayed){
                                 printf("You have a notification.");
                                 printf("Dear %s,\nYour %s - %s flight number %d was delayed.\nWe are sorry for the delay, we wish you a pleasant flight!\n",account->name,reservations[i].flight->departureCity,reservations[i].flight->arrivalCity,reservations[i].flight->flightId);
+                                break;
                             }
+                        } else{
+                            printf("\nYou have not a notification.\n");
                         }
                     }
                     
